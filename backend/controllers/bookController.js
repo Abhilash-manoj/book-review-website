@@ -76,17 +76,17 @@ export const getFeaturedBooks = async (req, res) => {
     const booksWithRatings = await Review.aggregate([
       {
         $group: {
-          _id: "$book", // group by book ID
+          _id: "$book", 
           avgRating: { $avg: "$rating" },
           reviewCount: { $sum: 1 }
         }
       },
       {
-        $match: { avgRating: { $gte: 4, $lte: 5 } } // only books rated 4–5
+        $match: { avgRating: { $gte: 4, $lte: 5 } }
       },
       {
         $lookup: {
-          from: "books", // name of books collection
+          from: "books", 
           localField: "_id",
           foreignField: "_id",
           as: "bookInfo"
@@ -114,5 +114,29 @@ export const getFeaturedBooks = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const getBooksbySearch = async (req, res) => {
+  try {
+    const { search, genre } = req.query;
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { author: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    if (genre) {
+      query.genre = genre;
+    }
+
+    const books = await Book.find(query);
+    res.status(200).json({ books, totalPages: 1, currentPage: 1 });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching books", error });
   }
 };

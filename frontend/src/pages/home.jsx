@@ -33,13 +33,12 @@ const BookCard = ({ book }) => (
   </div>
 );
 
-// --- Main Home Component ---
 export default function Home() {
   const navigate = useNavigate();
   const [featuredBooks, setFeaturedBooks] = useState([]);
   const isLoggedIn = !!localStorage.getItem("token");
 
-  // Fetch featured books
+  
   useEffect(() => {
     const fetchFeaturedBooks = async () => {
       try {

@@ -5,18 +5,13 @@ export const protect = async (req, res, next) => {
   let token;
 
   try {
-    // Check if token exists in headers
+   
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
-      // Extract token
       token = req.headers.authorization.split(" ")[1];
-
-      // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Attach user info (without password) to request object
       req.user = await User.findById(decoded.id).select("-password");
       console.log("Authenticated User:", req.user);
 
@@ -24,7 +19,7 @@ export const protect = async (req, res, next) => {
         return res.status(401).json({ message: "User not found" });
       }
 
-      next(); // Continue to the next middleware or controller
+      next(); 
     } else {
       res.status(401).json({ message: "No token provided" });
     }

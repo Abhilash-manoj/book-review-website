@@ -13,7 +13,7 @@ export default function Profile() {
       try {
         const response = await getUserProfile(token);
         console.log("Profile data from API:", response);
-        setProfile(response.data); // ← FIX HERE
+        setProfile(response.data); 
       } catch (error) {
         console.error("Error fetching profile:", error);
       } finally {

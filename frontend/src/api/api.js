@@ -24,6 +24,8 @@ export const deleteBook = (id, token) =>
 
 export const getBooks = (page = 1) => API.get(`/books/getbook?page=${page}`);
 
+export const getBooksbySearch = (search = "", genre = "") => API.get(`/books`,{params: { search, genre }});
+
 export const getBookDetails = (id) => API.get(`/books/getbookdetails/${id}`);
 
 export const getFeaturedBooks = () => API.get(`/books/featured`);

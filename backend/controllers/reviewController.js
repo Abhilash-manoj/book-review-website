@@ -44,7 +44,7 @@ const maxRating = parseFloat(req.query.maxRating) || 5;
   }
 };
 
-// Edit review
+
 export const editReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
@@ -54,7 +54,7 @@ export const editReview = async (req, res) => {
 
     if (!review) return res.status(404).json({ message: "Review not found" });
 
-    // Check ownership
+
     if (review.user.toString() !== req.user.id) {
       return res.status(403).json({ message: "Unauthorized" });
     }
@@ -69,7 +69,7 @@ export const editReview = async (req, res) => {
   }
 };
 
-// Delete review
+
 export const deleteReview = async (req, res) => {
   try {
     const { reviewId } = req.params;

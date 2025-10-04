@@ -3,7 +3,7 @@ import { editBook, getBookDetails, deleteBook } from "../api/api";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
-// --- SVG Icon Components ---
+
 const LogoIcon = () => (
   <svg className="h-8 w-8 text-indigo-500" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
     <path
