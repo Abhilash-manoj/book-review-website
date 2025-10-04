@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { Book } from "../models/Books.js";
+import { Review } from "../models/Reviews.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -34,8 +36,21 @@ export const loginUser = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ message: "Login successful", token });
+    res.json({ message: "Login successful", token, user });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const books = await Book.find({ addedBy: userId });
+    const reviews = await Review.find({ user: userId }).populate("book", "title");
+
+    res.json({ books, reviews });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to load user profile" });
   }
 };

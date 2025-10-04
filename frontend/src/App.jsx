@@ -8,6 +8,7 @@ import BookList from "./pages/BookList";
 import AddBook from "./pages/AddBook";
 import EditBook from "./pages/EditBook";
 import BookDetails from "./pages/BookDetails";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/addbook" element={<AddBook />} />
         <Route path="/editbook/:id" element={<EditBook />} />
         <Route path="/bookdetails/:id" element={<BookDetails />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );

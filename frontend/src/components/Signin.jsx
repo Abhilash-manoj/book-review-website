@@ -22,6 +22,8 @@ export default function SignIn() {
     try {
       const res = await loginUser(formData);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("userId", res.data.user._id);
+      
       alert("Login successful!");
       navigate("/");
     } catch (err) {

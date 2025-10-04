@@ -1,4 +1,5 @@
 import { Book } from "../models/Books.js";
+import { Review } from "../models/Reviews.js";
 
 export const addBook = async (req, res) => {
   try {
@@ -34,7 +35,7 @@ export const deleteBook = async (req, res) => {
     if (book.addedBy.toString() !== req.user.id)
       return res.status(403).json({ message: "Not authorized" });
 
-    await book.remove();
+    await book.deleteOne();
     res.json({ message: "Book deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -67,5 +68,51 @@ export const getBookDetails = async (req, res) => {
     res.json(book);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getFeaturedBooks = async (req, res) => {
+  try {
+    const booksWithRatings = await Review.aggregate([
+      {
+        $group: {
+          _id: "$book", // group by book ID
+          avgRating: { $avg: "$rating" },
+          reviewCount: { $sum: 1 }
+        }
+      },
+      {
+        $match: { avgRating: { $gte: 4, $lte: 5 } } // only books rated 4–5
+      },
+      {
+        $lookup: {
+          from: "books", // name of books collection
+          localField: "_id",
+          foreignField: "_id",
+          as: "bookInfo"
+        }
+      },
+      {
+        $unwind: "$bookInfo"
+      },
+      {
+        $project: {
+          _id: "$bookInfo._id",
+          title: "$bookInfo.title",
+          author: "$bookInfo.author",
+          genre: "$bookInfo.genre",
+          year: "$bookInfo.year",
+          description: "$bookInfo.description",
+          imageUrl: "$bookInfo.imageUrl",
+          rating: { $round: ["$avgRating", 1] },
+          reviewCount: 1
+        }
+      }
+    ]);
+
+    res.json(booksWithRatings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };

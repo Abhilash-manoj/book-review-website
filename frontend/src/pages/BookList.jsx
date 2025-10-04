@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getBooks } from "../api/api";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
 // --- SVG Icon Components ---
 const LogoIcon = () => (
@@ -14,7 +15,8 @@ export default function BookList() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const isLoggedIn = true; // Assume user is logged in
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token; 
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -34,25 +36,7 @@ export default function BookList() {
 
   return (
     <div className="min-h-screen bg-[#131022] font-sans text-gray-200 flex flex-col">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#131022]/80 backdrop-blur-sm">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <a href="/" className="flex items-center gap-3">
-            <LogoIcon />
-            <h2 className="text-xl font-bold text-white">BookVerse</h2>
-          </a>
-           <div className="flex items-center gap-4">
-            {isLoggedIn ? (
-                 <div className="h-9 w-9 rounded-full bg-cover bg-center border-2 border-indigo-500" style={{backgroundImage: ``}}></div>
-            ) : (
-                <div className="flex items-center gap-2">
-                    <a href="/signin" className="text-sm font-medium text-gray-300 hover:text-indigo-400">Sign In</a>
-                    <a href="/signup" className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-lg hover:bg-indigo-500">Sign Up</a>
-                </div>
-            )}
-          </div>
-        </div>
-      </header>
+    <Navbar />
       
       {/* Main Content */}
       <main className="flex-grow">
