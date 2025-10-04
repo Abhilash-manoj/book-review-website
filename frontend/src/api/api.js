@@ -1,0 +1,25 @@
+import axios from "axios";
+
+const API = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
+
+//user APIs
+export const registerUser = (userData) => API.post("/users/register", userData);
+export const loginUser = (userData) => API.post("/users/login", userData);
+
+//book APIs
+export const addBook = (bookData, token) =>
+  API.post("/books/addbook", bookData, { headers: { Authorization: `Bearer ${token}` } });
+
+export const editBook = (id, bookData, token) =>
+  API.put(`/books/editbook/${id}`, bookData, { headers: { Authorization: `Bearer ${token}` } });
+
+export const deleteBook = (id, token) =>
+  API.delete(`/books/deletebook/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+
+export const getBooks = (page = 1) => API.get(`/books/getbook?page=${page}`);
+
+export const getBookDetails = (id) => API.get(`/books/getbookdetails/${id}`);
+
+export default API;
